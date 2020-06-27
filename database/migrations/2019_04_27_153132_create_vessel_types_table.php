@@ -33,6 +33,6 @@ class CreateVesselTypesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('vessel_types');
+        Schema::dropIfExists('vessel_types');
     }
 }

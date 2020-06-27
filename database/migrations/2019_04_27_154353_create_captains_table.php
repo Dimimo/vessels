@@ -33,6 +33,6 @@ class CreateCaptainsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('captains');
+        Schema::dropIfExists('captains');
     }
 }

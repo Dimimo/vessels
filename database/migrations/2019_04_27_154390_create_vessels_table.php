@@ -27,11 +27,13 @@ class CreateVesselsTable extends Migration
             $table->unsignedInteger('captain_id')->nullable(); //a captain can be assigned but it doesn't have to be
             $table->foreign('captain_id')->references('id')->on('captains');
             $table->unsignedSmallInteger('capacity')->nullable();
+            $table->string('picture')->nullable();
             $table->string('description')->nullable();
             $table->text('body')->nullable();
             $table->boolean('in_service')->default(1);
             $table->date('operational_since')->nullable();
-            $table->string('picture')->nullable();
+            $table->date('decommissioned_since')->nullable();
+            $table->text('reason')->nullable()->comment('Reason why it\'s out of service');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -44,6 +46,6 @@ class CreateVesselsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('vessels');
+        Schema::dropIfExists('vessels');
     }
 }

@@ -1,14 +1,14 @@
 <?php
 
-/* @var $factory \Illuminate\Database\Eloquent\Factory */
+/* @var $factory Factory */
 
 use App\VesselType;
 use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(VesselType::class, function (Faker $faker) {
     return [
-        'name'        => $faker->company,
-        'slug'        => $faker->slug(3, false),
+        'name'        => $faker->unique()->randomElement(['RoRo', 'SuperCat', 'Fast Ferry', 'Ferry']),
         'description' => $faker->sentence,
         'picture'     => $faker->word . '.png',
     ];

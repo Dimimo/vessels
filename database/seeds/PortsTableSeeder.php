@@ -2,6 +2,9 @@
 
 use Illuminate\Database\Seeder;
 
+/**
+ * Class PortsTableSeeder
+ */
 class PortsTableSeeder extends Seeder
 {
     /**

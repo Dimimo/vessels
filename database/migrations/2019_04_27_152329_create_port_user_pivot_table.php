@@ -17,9 +17,9 @@ class CreatePortUserPivotTable extends Migration
     {
         Schema::create('port_user', function (Blueprint $table) {
             $table->integer('port_id')->unsigned()->index();
-            $table->foreign('port_id')->references('id')->on('ports');
+            $table->foreign('port_id')->references('id')->on('ports')->onDelete('cascade');
             $table->integer('user_id')->unsigned()->index();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->primary(['port_id', 'user_id']);
         });
     }
@@ -31,6 +31,6 @@ class CreatePortUserPivotTable extends Migration
      */
     public function down()
     {
-        Schema::drop('port_user');
+        Schema::dropIfExists('port_user');
     }
 }

@@ -1,8 +1,9 @@
 <?php
-/* @var $factory \Illuminate\Database\Eloquent\Factory */
+/* @var $factory Factory */
 
 use App\User;
 use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Str;
 
 /*
@@ -22,6 +23,7 @@ $factory->define(User::class, function (Faker $faker) {
         'email_verified_at' => now(),
         'password'          => Hash::make('secret'),
         'remember_token'    => Str::random(10),
+        'city_id'           => $faker->randomElement([153, 1183, 1173, 976, 438]),
         'contact_nr'        => $faker->phoneNumber,
         'contact_name'      => $faker->name,
         'title'             => $faker->sentence,

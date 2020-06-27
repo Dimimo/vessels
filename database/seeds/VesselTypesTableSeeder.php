@@ -2,6 +2,9 @@
 
 use Illuminate\Database\Seeder;
 
+/**
+ * Class VesselTypesTableSeeder
+ */
 class VesselTypesTableSeeder extends Seeder
 {
     /**

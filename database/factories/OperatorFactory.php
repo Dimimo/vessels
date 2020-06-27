@@ -1,9 +1,10 @@
 <?php
 
-/* @var $factory \Illuminate\Database\Eloquent\Factory */
+/* @var $factory Factory */
 
 use App\Operator;
 use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(Operator::class, function (Faker $faker) {
     return [
@@ -11,7 +12,7 @@ $factory->define(Operator::class, function (Faker $faker) {
         //'slug' => $faker->slug(3,false),
         'company_name'   => $faker->company,
         'email'          => $faker->unique()->safeEmail,
-        'city'           => $faker->city,
+        'city_id'        => $faker->randomElement([153, 1183, 1173, 976, 438]),
         'address1'       => $faker->address,
         'contact_nr'     => $faker->phoneNumber,
         'contact_name'   => $faker->name,

@@ -2,6 +2,9 @@
 
 use Illuminate\Database\Seeder;
 
+/**
+ * Class BarangaysTableSeeder
+ */
 class BarangaysTableSeeder extends Seeder
 {
     /**

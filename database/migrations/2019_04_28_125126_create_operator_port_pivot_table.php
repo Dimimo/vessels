@@ -3,6 +3,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
+/**
+ * Class CreateOperatorPortPivotTable
+ */
 class CreateOperatorPortPivotTable extends Migration
 {
     /**
@@ -28,6 +31,6 @@ class CreateOperatorPortPivotTable extends Migration
      */
     public function down()
     {
-        Schema::drop('operator_port');
+        Schema::dropIfExists('operator_port');
     }
 }

@@ -3,64 +3,78 @@
 namespace App;
 
 use Cviebrock\EloquentSluggable\Sluggable;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 
 /**
  * App\Vessel
  *
- * @property int                                                                                  $id
- * @property string                                                                               $name
- * @property string                                                                               $slug
- * @property string|null                                                                          $nickname
- * @property int                                                                                  $vessel_type_id
- * @property int                                                                                  $operator_id
- * @property int|null                                                                             $captain_id
- * @property int|null                                                                             $capacity
- * @property string|null                                                                          $description
- * @property string|null                                                                          $body
- * @property bool                                                                                 $in_service
- * @property string|null                                                                          $operational_since
- * @property string|null                                                                          $picture
- * @property \Illuminate\Support\Carbon|null                                                      $created_at
- * @property \Illuminate\Support\Carbon|null                                                      $updated_at
- * @property \Illuminate\Support\Carbon|null                                                      $deleted_at
- * @property-read \App\Captain|null                                                               $captain
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Departure[]                       $departures
- * @property-read \App\Operator                                                                   $operator
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[]       $roles
- * @property-read \App\VesselType                                                                 $type
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel findSimilarSlugs($attribute, $config, $slug)
+ * @property int                          $id
+ * @property string                       $name
+ * @property string                       $slug
+ * @property string|null                  $nickname
+ * @property int                          $vessel_type_id
+ * @property int                          $operator_id
+ * @property int|null                     $captain_id
+ * @property int|null                     $capacity
+ * @property string|null                  $picture
+ * @property string|null                  $description
+ * @property string|null                  $body
+ * @property bool                         $in_service
+ * @property Carbon|null                  $operational_since
+ * @property Carbon|null                  $decommissioned_since
+ * @property string|null                  $reason Reason why it's out of service
+ * @property Carbon|null                  $created_at
+ * @property Carbon|null                  $updated_at
+ * @property Carbon|null                  $deleted_at
+ * @property-read Captain|null            $captain
+ * @property-read Collection|Departure[]  $departures
+ * @property-read Operator                $operator
+ * @property-read Collection|Permission[] $permissions
+ * @property-read Collection|Role[]       $roles
+ * @property-read VesselType              $type
+ * @method static Builder|Vessel active()
+ * @method static Builder|Vessel findSimilarSlugs($attribute, $config, $slug)
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel newQuery()
- * @method static \Illuminate\Database\Query\Builder|\App\Vessel onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel permission($permissions)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel query()
+ * @method static Builder|Vessel newModelQuery()
+ * @method static Builder|Vessel newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Vessel onlyTrashed()
+ * @method static Builder|Vessel permission($permissions)
+ * @method static Builder|Vessel query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel role($roles, $guard = null)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel whereBody($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel whereCapacity($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel whereCaptainId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel whereInService($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel whereNickname($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel whereOperationalSince($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel whereOperatorId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel wherePicture($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel whereSlug($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Vessel whereVesselTypeId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Vessel withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Vessel withoutTrashed()
- * @mixin \Eloquent
+ * @method static Builder|Vessel role($roles, $guard = null)
+ * @method static Builder|Vessel today()
+ * @method static Builder|Vessel whereBody($value)
+ * @method static Builder|Vessel whereCapacity($value)
+ * @method static Builder|Vessel whereCaptainId($value)
+ * @method static Builder|Vessel whereCreatedAt($value)
+ * @method static Builder|Vessel whereDecommissionedSince($value)
+ * @method static Builder|Vessel whereDeletedAt($value)
+ * @method static Builder|Vessel whereDescription($value)
+ * @method static Builder|Vessel whereId($value)
+ * @method static Builder|Vessel whereInService($value)
+ * @method static Builder|Vessel whereName($value)
+ * @method static Builder|Vessel whereNickname($value)
+ * @method static Builder|Vessel whereOperationalSince($value)
+ * @method static Builder|Vessel whereOperatorId($value)
+ * @method static Builder|Vessel wherePicture($value)
+ * @method static Builder|Vessel whereReason($value)
+ * @method static Builder|Vessel whereSlug($value)
+ * @method static Builder|Vessel whereUpdatedAt($value)
+ * @method static Builder|Vessel whereVesselTypeId($value)
+ * @method static \Illuminate\Database\Query\Builder|Vessel withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Vessel withoutTrashed()
+ * @mixin Eloquent
  */
 class Vessel extends Model
 {
@@ -79,10 +93,13 @@ class Vessel extends Model
         'operator_id',
         'captain_id,',
         'capacity',
+        'picture',
         'description',
         'body',
         'in_service',
-        'picture',
+        'operational_since',
+        'decommissioned_since',
+        'reason',
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -96,9 +113,22 @@ class Vessel extends Model
      * @var array
      */
     protected $casts = [
-        'capacity'   => 'integer',
-        'in_service' => 'boolean',
+        'capacity'             => 'integer',
+        'in_service'           => 'boolean',
+        'operational_since'    => 'date',
+        'decommissioned_since' => 'date',
     ];
+
+    /**
+     * The attributes that should be mutated to Carbon dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'operational_since',
+        'decommissioned_since',
+    ];
+
     /**
      * For use of Laravel-permission, the package from spatie
      */
@@ -116,6 +146,28 @@ class Vessel extends Model
         ];
     }
 
+    /**
+     * Scope a query to only include active vessels.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('in_service', 1);
+    }
+
+    /**
+     * Scope a query to only include active users.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeToday($query)
+    {
+        return $query->where('active', 1);
+    }
+
     /**************************************
      *
      * The eloquent relationships
@@ -125,7 +177,7 @@ class Vessel extends Model
     /**
      * a vessel has many departures
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany Departure
+     * @return HasMany Departure
      */
     public function departures()
     {
@@ -135,7 +187,7 @@ class Vessel extends Model
     /**
      * a vessel belongsTo an operator
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo Operator
+     * @return BelongsTo Operator
      */
     public function operator()
     {
@@ -145,7 +197,7 @@ class Vessel extends Model
     /**
      * a vessel hasOne captain
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo Captain
+     * @return BelongsTo Captain
      */
     public function captain()
     {
@@ -155,10 +207,10 @@ class Vessel extends Model
     /**
      * a vessel has one type
      *
-     * @return \Illuminate\Database\Eloquent\Relations\hasOne VesselType
+     * @return BelongsTo VesselType
      */
     public function type()
     {
-        return $this->hasOne(VesselType::class);
+        return $this->belongsTo(VesselType::class, 'vessel_type_id', 'id');
     }
 }

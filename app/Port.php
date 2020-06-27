@@ -12,75 +12,90 @@
 namespace App;
 
 use Cviebrock\EloquentSluggable\Sluggable;
+use Eloquent;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Carbon;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 
 /**
- * Class Port
+ * App\Port
  *
- * @package App
- * @property int                                                                                  $id
- * @property string                                                                               $name
- * @property string                                                                               $slug
- * @property string|null                                                                          $email
- * @property string                                                                               $city
- * @property string|null                                                                          $address1
- * @property string|null                                                                          $address2
- * @property string|null                                                                          $contact_nr
- * @property string|null                                                                          $contact_name
- * @property string|null                                                                          $emergency_nr
- * @property string|null                                                                          $emergency_name
- * @property string|null                                                                          $url
- * @property string|null                                                                          $facebook
- * @property string|null                                                                          $twitter
- * @property string|null                                                                          $instagram
- * @property string|null                                                                          $body
- * @property float|null                                                                           $lat
- * @property float|null                                                                           $lng
- * @property \Illuminate\Support\Carbon|null                                                      $created_at
- * @property \Illuminate\Support\Carbon|null                                                      $updated_at
- * @property \Illuminate\Support\Carbon|null                                                      $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[]                            $admins
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Departure[]                       $arrivals
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Departure[]                       $departures
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Operator[]                        $operators
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[]       $roles
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port findSimilarSlugs($attribute, $config, $slug)
+ * @property int                           $id
+ * @property string                        $name
+ * @property string                        $slug
+ * @property string|null                   $email
+ * @property int                           $city_id
+ * @property string|null                   $address1
+ * @property string|null                   $address2
+ * @property string|null                   $contact_nr
+ * @property string|null                   $contact_name
+ * @property string|null                   $emergency_nr
+ * @property string|null                   $emergency_name
+ * @property string|null                   $official_info
+ * @property string|null                   $url
+ * @property string|null                   $facebook
+ * @property string|null                   $twitter
+ * @property string|null                   $instagram
+ * @property string|null                   $body
+ * @property float|null                    $lat
+ * @property float|null                    $lng
+ * @property Carbon|null                   $created_at
+ * @property Carbon|null                   $updated_at
+ * @property Carbon|null                   $deleted_at
+ * @property-read Collection|User[]        $admins
+ * @property-read Collection|Departure[]   $arrivals
+ * @property-read City                     $city
+ * @property-read Collection|Departure[]   $departures
+ * @property-read string                   $city_name
+ * @property-read Collection|Operator[]    $operators
+ * @property-read Collection|Permission[]  $permissions
+ * @property-read Collection|Reservation[] $reservations
+ * @property-read Collection|Role[]        $roles
+ * @property-read Collection|Tax[]         $taxes
+ * @method static \Illuminate\Database\Eloquent\Builder|Port findSimilarSlugs($attribute, $config, $slug)
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port newQuery()
- * @method static \Illuminate\Database\Query\Builder|\App\Port onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port permission($permissions)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Port newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Port newQuery()
+ * @method static Builder|Port onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Port permission($permissions)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port role($roles, $guard = null)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereAddress1($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereAddress2($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereBody($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereCity($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereContactName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereContactNr($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereEmergencyName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereEmergencyNr($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereFacebook($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereInstagram($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereLat($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereLng($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereSlug($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereTwitter($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Port whereUrl($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Port withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Port withoutTrashed()
- * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|Port role($roles, $guard = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereAddress1($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereAddress2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereBody($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereCityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereContactName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereContactNr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereEmergencyName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereEmergencyNr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereFacebook($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereInstagram($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereLat($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereLng($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereOfficialInfo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereTwitter($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Port whereUrl($value)
+ * @method static Builder|Port withTrashed()
+ * @method static Builder|Port withoutTrashed()
+ * @mixin Eloquent
  */
 class Port extends Model
 {
@@ -95,7 +110,7 @@ class Port extends Model
         'name',
         'slug',
         'email',
-        'city',
+        'city_id',
         'address1',
         'address2,',
         'contact_nr',
@@ -143,6 +158,30 @@ class Port extends Model
         ];
     }
 
+    /**
+     * Get the city name as $port->city_name
+     *
+     * @return string
+     */
+    public function getCityNameAttribute()
+    {
+        return $this->city->getCityName();
+    }
+
+    /**
+     * set the city name from a posted autocomplete, sets the correct value in $port->city_id
+     *
+     * @param int|string $value
+     */
+    public function setCityIdAttribute($value)
+    {
+        if (is_integer($value)) {
+            $this->attributes['city_id'] = $value;
+        } else {
+            $this->attributes['city_id'] = City::getCityFromAutoComplete($value);
+        }
+    }
+
     /**************************************
      *
      * The eloquent relationships
@@ -152,7 +191,7 @@ class Port extends Model
     /**
      * a port belongsTo many users (many to many), these are essentially super-admins
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany User
+     * @return BelongsToMany User
      */
     public function admins()
     {
@@ -162,7 +201,7 @@ class Port extends Model
     /**
      * a port belongsTo many operators (many to many)
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany Operator
+     * @return BelongsToMany Operator
      */
     public function operators()
     {
@@ -172,7 +211,7 @@ class Port extends Model
     /**
      * a port has many departures
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany Departure
+     * @return HasMany Departure
      */
     public function departures()
     {
@@ -182,10 +221,40 @@ class Port extends Model
     /**
      * a port has many arrivals
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany Departure
+     * @return HasMany Departure
      */
     public function arrivals()
     {
         return $this->hasMany(Departure::class, 'to_port_id');
+    }
+
+    /**
+     * a port has many possible taxes
+     *
+     * @return HasMany Departure
+     */
+    public function taxes()
+    {
+        return $this->hasMany(Tax::class);
+    }
+
+    /**
+     * a Port belongs to a city
+     *
+     * @return BelongsTo City
+     */
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    /**
+     * a port has many reservations through Operators
+     *
+     * @return HasManyThrough Departure
+     */
+    public function reservations()
+    {
+        return $this->hasManyThrough(Reservation::class, Operator::class);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Spatie\Permission\Commands\Show;
 
 class Kernel extends ConsoleKernel
 {
@@ -12,13 +13,14 @@ class Kernel extends ConsoleKernel
      *
      * @var array
      */
-    protected $commands = [//
+    protected $commands = [
+        Show::class
     ];
 
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param Schedule $schedule
      *
      * @return void
      */

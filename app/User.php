@@ -3,74 +3,92 @@
 namespace App;
 
 use Cviebrock\EloquentSluggable\Sluggable;
+use Eloquent;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\hasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
  * App\User
  *
- * @property int                                                                                                            $id
- * @property string                                                                                                         $name
- * @property string                                                                                                         $slug
- * @property string                                                                                                         $email
- * @property string|null                                                                                                    $phone_nr
- * @property int                                                                                                            $is_super_admin
- * @property int                                                                                                            $is_admin
- * @property int                                                                                                            $is_statistical
- * @property int                                                                                                            $is_editor
- * @property int                                                                                                            $is_port_authority
- * @property int                                                                                                            $is_operator
- * @property int                                                                                                            $is_agent
- * @property int                                                                                                            $is_captain
- * @property \Illuminate\Support\Carbon|null                                                                                $email_verified_at
- * @property string                                                                                                         $password
- * @property string|null                                                                                                    $title
- * @property string|null                                                                                                    $description
- * @property string|null                                                                                                    $remember_token
- * @property \Illuminate\Support\Carbon|null                                                                                $created_at
- * @property \Illuminate\Support\Carbon|null                                                                                $updated_at
- * @property \Illuminate\Support\Carbon|null                                                                                $deleted_at
- * @property-read \App\Captain                                                                                              $captain
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Operator[]                                                  $operators
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[]                           $permissions
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Port[]                                                      $ports
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[]                                 $roles
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User findSimilarSlugs($attribute, $config, $slug)
+ * @property int                                                        $id
+ * @property string                                                     $name
+ * @property string                                                     $slug
+ * @property string                                                     $email
+ * @property int|null                                                   $city_id
+ * @property string|null                                                $contact_nr
+ * @property string|null                                                $contact_name
+ * @property bool                                                       $is_super_admin
+ * @property bool                                                       $is_admin
+ * @property bool                                                       $is_statistical
+ * @property bool                                                       $is_editor
+ * @property bool                                                       $is_port_authority
+ * @property bool                                                       $is_operator
+ * @property bool                                                       $is_operator_employee
+ * @property bool                                                       $is_agent
+ * @property bool                                                       $is_captain
+ * @property Carbon|null                                                $email_verified_at
+ * @property string                                                     $password
+ * @property string|null                                                $title
+ * @property string|null                                                $description
+ * @property string|null                                                $remember_token
+ * @property Carbon|null                                                $created_at
+ * @property Carbon|null                                                $updated_at
+ * @property Carbon|null                                                $deleted_at
+ * @property-read Captain                                               $captain
+ * @property-read City|null                                             $city
+ * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications
+ * @property-read Collection|Operator[]                                 $operators
+ * @property-read Collection|Permission[]                               $permissions
+ * @property-read Collection|Port[]                                     $ports
+ * @property-read Collection|Role[]                                     $roles
+ * @method static \Illuminate\Database\Eloquent\Builder|User findSimilarSlugs($attribute, $config, $slug)
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User newQuery()
- * @method static \Illuminate\Database\Query\Builder|\App\User onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User permission($permissions)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static Builder|User onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions)
+ * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User role($roles, $guard = null)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmailVerifiedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereIsAdmin($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereIsAgent($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereIsCaptain($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereIsEditor($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereIsOperator($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereIsPortAuthority($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereIsStatistical($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereIsSuperAdmin($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePhoneNr($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereRememberToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereSlug($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\User withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\User withoutTrashed()
- * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereContactName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereContactNr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsAdmin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsAgent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsCaptain($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsEditor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsOperator($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsOperatorEmployee($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsPortAuthority($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsStatistical($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsSuperAdmin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @method static Builder|User withTrashed()
+ * @method static Builder|User withoutTrashed()
+ * @mixin Eloquent
  */
 class User extends Authenticatable
 {
@@ -85,6 +103,7 @@ class User extends Authenticatable
         'slug',
         'email',
         'password',
+        'city_id',
         'contact_nr',
         'contact_name',
         'is_super_admin',
@@ -93,10 +112,12 @@ class User extends Authenticatable
         'is_editor',
         'is_port_authority',
         'is_operator',
+        'is_operator_employee',
         'is_agent',
         'is_captain',
         'title',
         'description',
+        'email_verified_at',
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -114,15 +135,16 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'is_super_admin'    => 'boolean',
-        'is_admin'          => 'boolean',
-        'is_statistical'    => 'boolean',
-        'is_editor'         => 'boolean',
-        'is_port_authority' => 'boolean',
-        'is_operator'       => 'boolean',
-        'is_agent'          => 'boolean',
-        'is_captain'        => 'boolean',
+        'email_verified_at'    => 'datetime',
+        'is_super_admin'       => 'boolean',
+        'is_admin'             => 'boolean',
+        'is_statistical'       => 'boolean',
+        'is_editor'            => 'boolean',
+        'is_port_authority'    => 'boolean',
+        'is_operator'          => 'boolean',
+        'is_operator_employee' => 'boolean',
+        'is_agent'             => 'boolean',
+        'is_captain'           => 'boolean',
     ];
 
     /**
@@ -133,7 +155,7 @@ class User extends Authenticatable
     public function sluggable()
     {
         return ['slug' =>
-                    ['source' => 'name', 'onUpdate' => false],
+                    ['source' => 'name', 'on_update' => false],
         ];
     }
 
@@ -145,7 +167,7 @@ class User extends Authenticatable
     /**
      * a user belongs to many ports (admin functions)
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany Port
+     * @return BelongsToMany Port
      */
     public function ports()
     {
@@ -155,7 +177,7 @@ class User extends Authenticatable
     /**
      * a user belongs to many operators (admin functions)
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany Port
+     * @return BelongsToMany Port
      */
     public function operators()
     {
@@ -165,10 +187,20 @@ class User extends Authenticatable
     /**
      * a user hasOne captain
      *
-     * @return \Illuminate\Database\Eloquent\Relations\hasOne Captain
+     * @return hasOne Captain
      */
     public function captain()
     {
         return $this->hasOne(Captain::class, 'user_id');
+    }
+
+    /**
+     * a user belongs to a city
+     *
+     * @return BelongsTo City
+     */
+    public function city()
+    {
+        return $this->belongsTo(City::class);
     }
 }

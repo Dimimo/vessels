@@ -3,39 +3,44 @@
 namespace App;
 
 use Cviebrock\EloquentSluggable\Sluggable;
+use Eloquent;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Carbon;
 
 /**
  * App\VesselType
  *
- * @property int                                                         $id
- * @property string                                                      $name
- * @property string                                                      $slug
- * @property string|null                                                 $description
- * @property string|null                                                 $picture
- * @property \Illuminate\Support\Carbon|null                             $created_at
- * @property \Illuminate\Support\Carbon|null                             $updated_at
- * @property \Illuminate\Support\Carbon|null                             $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Vessel[] $vessels
- * @method static \Illuminate\Database\Eloquent\Builder|\App\VesselType findSimilarSlugs($attribute, $config, $slug)
+ * @property int                      $id
+ * @property string                   $name
+ * @property string                   $slug
+ * @property string|null              $description
+ * @property string|null              $picture
+ * @property Carbon|null              $created_at
+ * @property Carbon|null              $updated_at
+ * @property Carbon|null              $deleted_at
+ * @property-read Collection|Vessel[] $vessels
+ * @method static \Illuminate\Database\Eloquent\Builder|VesselType findSimilarSlugs($attribute, $config, $slug)
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\VesselType newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\VesselType newQuery()
- * @method static \Illuminate\Database\Query\Builder|\App\VesselType onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\VesselType query()
+ * @method static \Illuminate\Database\Eloquent\Builder|VesselType newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|VesselType newQuery()
+ * @method static Builder|VesselType onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|VesselType query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\VesselType whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\VesselType whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\VesselType whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\VesselType whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\VesselType whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\VesselType wherePicture($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\VesselType whereSlug($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\VesselType whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\VesselType withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\VesselType withoutTrashed()
- * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|VesselType whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VesselType whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VesselType whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VesselType whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VesselType whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VesselType wherePicture($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VesselType whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VesselType whereUpdatedAt($value)
+ * @method static Builder|VesselType withTrashed()
+ * @method static Builder|VesselType withoutTrashed()
+ * @mixin Eloquent
  */
 class VesselType extends Model
 {
@@ -77,10 +82,16 @@ class VesselType extends Model
         ];
     }
 
+    /**************************************
+     *
+     * The eloquent relationships
+     *
+     **************************************/
+
     /**
      * a vessel type has many vessels
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany Vessel
+     * @return HasMany Vessel
      */
     public function vessels()
     {

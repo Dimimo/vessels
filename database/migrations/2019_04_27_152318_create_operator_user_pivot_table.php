@@ -17,9 +17,9 @@ class CreateOperatorUserPivotTable extends Migration
     {
         Schema::create('operator_user', function (Blueprint $table) {
             $table->integer('operator_id')->unsigned()->index();
-            $table->foreign('operator_id')->references('id')->on('operators');
+            $table->foreign('operator_id')->references('id')->on('operators')->onDelete('cascade');
             $table->integer('user_id')->unsigned()->index();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->primary(['operator_id', 'user_id']);
         });
     }
@@ -31,6 +31,6 @@ class CreateOperatorUserPivotTable extends Migration
      */
     public function down()
     {
-        Schema::drop('operator_user');
+        Schema::dropIfExists('operator_user');
     }
 }

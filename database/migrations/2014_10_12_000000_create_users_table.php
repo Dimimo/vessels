@@ -4,6 +4,9 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateUsersTable
+ */
 class CreateUsersTable extends Migration
 {
     /**
@@ -13,12 +16,13 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table)
-        {
+        Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->string('slug')->unique();
             $table->string('email')->unique();
+            $table->unsignedInteger('city_id')->nullable()->index();
+            //$table->foreign('city_id')->references('id')->on('cities');
             $table->string('contact_nr')->nullable(); //official info
             $table->string('contact_name')->nullable(); //official info
             $table->boolean('is_super_admin')->default(0);
@@ -27,6 +31,7 @@ class CreateUsersTable extends Migration
             $table->boolean('is_editor')->default(0);
             $table->boolean('is_port_authority')->default(0);
             $table->boolean('is_operator')->default(0);
+            $table->boolean('is_operator_employee')->default(0);
             $table->boolean('is_agent')->default(0);
             $table->boolean('is_captain')->default(0);
             $table->timestamp('email_verified_at')->nullable();

@@ -1,0 +1,8 @@
+//import mix-ins
+@import 'mixins/md-colors';
+//nice collection of colors, used in inbox
+@import "mixins/main-colors";
+@import "mixins/sizes";
+@import "mixins/main-grid";
+@import "mixins/box-rounded";
+@import "mixins/snackbar";

@@ -3,6 +3,9 @@
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 
+/**
+ * Class ProvincesTableSeeder
+ */
 class ProvincesTableSeeder extends Seeder
 {
     /**

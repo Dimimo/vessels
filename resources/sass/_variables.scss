@@ -1,19 +1,95 @@
 // Body
 $body-bg: #f8fafc;
+$body-color: #555;
 
 // Typography
-$font-family-sans-serif: 'Nunito', sans-serif;
-$font-size-base: 0.9rem;
+$font-family-sans-serif: 'Roboto', Verdana, sans-serif;
+$font-size-base: 1.03rem;
 $line-height-base: 1.6;
 
 // Colors
+$black: #000000;
+$brown: #a52a2a;
+
 $blue: #3490dc;
-$indigo: #6574cd;
-$purple: #9561e2;
-$pink: #f66d9b;
-$red: #e3342f;
-$orange: #f6993f;
-$yellow: #ffed4a;
-$green: #38c172;
-$teal: #4dc0b5;
+$light-blue: #93cbf9;
+$dark-blue: darken($blue, 20%);
+
 $cyan: #6cb2eb;
+
+$dark: #333;
+$dark-grey: #555;
+$light-grey: #bbb;
+$grey: #777;
+
+$green: #38c172;
+$light-green: #b0d877;
+$dark-green: darken($green, 20%);
+$indigo: #6574cd;
+
+$orange: #f6993f;
+$orange2: #feb902;
+$light-orange: #fcac6f;
+
+$pink: #f66d9b;
+$pink2: #d6487e;
+$purple: #9561e2;
+
+$red: #e3342f;
+$red2: #e08374;
+$light-red: lighten($red, 20%);
+
+$teal: #4dc0b5;
+$white: #fff;
+$yellow: #ffed4a;
+
+//---------
+//main grid
+//---------
+$main-grid-transition-delay: 1s ease;
+$main-grid-color-01: #77C646;
+$main-grid-color-02: #daa458;
+$main-grid-color-03: #FFEA07;
+$main-grid-color-04: #93cbf9;
+$main-grid-color-05: #F5FF96;
+$main-grid-color-06: #e8f2e3;
+$main-grid-color-07: #c263ce;
+$main-grid-color-08: #2a91d8;
+$main-grid-color-09: #FFCDD2;
+$main-grid-color-10: #F8BBD0;
+$main-grid-color-11: #E1BEE7;
+$main-grid-color-12: #D1C4E9;
+$main-grid-color-13: #C5CAE9;
+$main-grid-color-14: #B3E5FC;
+$main-grid-color-15: #B2DFDB;
+$main-grid-color-16: #F0F4C3;
+$main-grid-color-17: #FFF9C4;
+$main-grid-color-18: #FFE0B2;
+$main-grid-color-19: #CFD8DC;
+$main-grid-color-20: #D7CCC8;
+
+//-----------
+//box rounded
+//-----------
+$box-rounded-background-primary: #E9E9FF;
+$box-rounded-border-primary: #A096FF;
+$box-rounded-background-success: #E6F5E1;
+$box-rounded-border-success: #B1EF9E;
+$box-rounded-background-info: #D9EDF7;
+$box-rounded-border-info: #27CDE1;
+$box-rounded-background-danger: #FFF1F1;
+$box-rounded-border-danger: #FFDADA;
+$box-rounded-background-yellow: #FEFEC8;
+$box-rounded-border-yellow: #F5FF96;
+$box-rounded-background-white: #FFFFFF;
+$box-rounded-border-white: #B3B3B3;
+$box-rounded-background-grey: #F2F2F2;
+$box-rounded-border-grey: #B3B3B3;
+$box-rounded-background-orange: #FFF3E0;
+$box-rounded-border-orange: #FFCC80;
+$box-rounded-background-lime: #F9FBE7;
+$box-rounded-border-lime: #DCE775;
+$box-rounded-background-purple: #F3E5F5;
+$box-rounded-border-purple: #CE93D8;
+$box-rounded-background-pink: #FCE4EC;
+$box-rounded-border-pink: #F8BBD0;

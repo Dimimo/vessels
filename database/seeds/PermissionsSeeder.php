@@ -22,6 +22,8 @@ class PermissionsSeeder extends Seeder
 // create permissions
         //super admin
         Permission::create(['name' => 'make admin']);
+        //administrators
+        Permission::create(['name' => 'admin']);
         //view information for officials only
         Permission::create(['name' => 'official info']);
         //users
@@ -80,9 +82,36 @@ class PermissionsSeeder extends Seeder
         //real departure + passengers input by captains
         Permission::create(['name' => 'real own departures']);
         Permission::create(['name' => 'real all departures']);
+        //reservations
+        Permission::create(['name' => 'create reservations']);
+        Permission::create(['name' => 'edit own reservations']);
+        Permission::create(['name' => 'edit all reservations']);
+        Permission::create(['name' => 'delete own reservations']);
+        Permission::create(['name' => 'delete all reservations']);
+        Permission::create(['name' => 'handle reservations']); //for Operator employees in the Port
+        //taxes
+        Permission::create(['name' => 'create taxes']);
+        Permission::create(['name' => 'edit own taxes']);
+        Permission::create(['name' => 'edit all taxes']);
+        Permission::create(['name' => 'delete own taxes']);
+        Permission::create(['name' => 'delete all taxes']);
+        //reductions
+        Permission::create(['name' => 'create reductions']);
+        Permission::create(['name' => 'edit own reductions']);
+        Permission::create(['name' => 'edit all reductions']);
+        Permission::create(['name' => 'delete own reductions']);
+        Permission::create(['name' => 'delete all reductions']);
+        //passengers
+        Permission::create(['name' => 'create passengers']);
+        Permission::create(['name' => 'edit own passengers']);
+        Permission::create(['name' => 'edit all passengers']);
+        Permission::create(['name' => 'delete own passengers']);
+        Permission::create(['name' => 'delete all passengers']);
+        Permission::create(['name' => 'handle passengers']); //for Operator employees in the Port
 // create roles and assign existing permissions
         $super_admin = Role::create(['name' => 'super admin']);
         $super_admin->givePermissionTo([
+            'admin',
             'make admin',
             'official info',
             'create users',
@@ -115,9 +144,22 @@ class PermissionsSeeder extends Seeder
             'edit all departures',
             'delete all departures',
             'real all departures',
+            'create taxes',
+            'edit all taxes',
+            'delete all taxes',
+            'create reductions',
+            'edit all reductions',
+            'delete all reductions',
+            'create reservations',
+            'edit all reservations',
+            'delete all reservations',
+            'create passengers',
+            'edit all passengers',
+            'delete all passengers',
         ]);
         $admins = Role::create(['name' => 'admin']);
         $admins->givePermissionTo([
+            'admin',
             'official info',
             'create users',
             'edit all users',
@@ -145,8 +187,20 @@ class PermissionsSeeder extends Seeder
             'create departures',
             'edit all departures',
             'delete all departures',
+            'create taxes',
+            'edit all taxes',
+            'delete all taxes',
+            'create reductions',
+            'edit all reductions',
+            'delete all reductions',
+            'create reservations',
+            'edit all reservations',
+            'delete all reservations',
+            'create passengers',
+            'edit all passengers',
+            'delete all passengers',
         ]);
-        $moderators = Role::create(['name' => 'moderator']);
+        $moderators = Role::create(['name' => 'editor']);
         $moderators->givePermissionTo([
             'official info',
             'create articles',
@@ -177,6 +231,12 @@ class PermissionsSeeder extends Seeder
             'edit own captains',
             'edit own departures',
             'real own departures',
+            'create taxes',
+            'edit own taxes',
+            'delete own taxes',
+            'create reductions',
+            'edit all reductions',
+            'delete all reductions',
         ]);
         $operators = Role::create(['name' => 'operator']);
         $operators->givePermissionTo([
@@ -194,9 +254,16 @@ class PermissionsSeeder extends Seeder
             'create departures',
             'edit own departures',
             'delete own departures',
-            'real own departures'
+            'real own departures',
+            'handle reservations',
+            'handle passengers',
         ]);
-        $agents = Role::create(['name' => 'agents']);
+        $operator_employees = Role::create(['name' => 'operator_employee']);
+        $operator_employees->givePermissionTo([
+            'handle reservations',
+            'handle passengers'
+        ]);
+        $agents = Role::create(['name' => 'agent']);
         $agents->givePermissionTo([
             'official info',
             'create departures',
@@ -205,6 +272,18 @@ class PermissionsSeeder extends Seeder
             'real own departures',
         ]);
         $captains = Role::create(['name' => 'captain']);
-        $captains->givePermissionTo('real own departures');
+        $captains->givePermissionTo([
+            'real own departures'
+        ]);
+        $reservees = Role::create(['name' => 'reservee']);
+        $reservees->givePermissionTo([
+            'create passengers',
+            'edit own passengers',
+            'delete own passengers',
+            'create reservations',
+            'edit own reservations',
+            'delete own reservations',
+        ]);
+        Role::create(['name' => 'statistical']);
     }
 }

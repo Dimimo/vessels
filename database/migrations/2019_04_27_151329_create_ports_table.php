@@ -20,7 +20,8 @@ class CreatePortsTable extends Migration
             $table->string('name');
             $table->string('slug')->index();
             $table->string('email')->unique()->nullable();
-            $table->string('city')->index();
+            $table->unsignedInteger('city_id')->index();
+            $table->foreign('city_id')->references('id')->on('cities');
             $table->string('address1')->nullable();
             $table->string('address2')->nullable();
             $table->string('contact_nr')->nullable();
@@ -47,6 +48,6 @@ class CreatePortsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('ports');
+        Schema::dropIfExists('ports');
     }
 }

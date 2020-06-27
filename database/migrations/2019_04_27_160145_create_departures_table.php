@@ -32,6 +32,7 @@ class CreateDeparturesTable extends Migration
             $table->text('official_info')->nullable();
             $table->unsignedSmallInteger('passengers')->nullable()->index(); //the real number of passengers on the ship at departure
             $table->dateTime('real_departure')->nullable()->index();
+            $table->decimal('price', 7, 2);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -44,6 +45,6 @@ class CreateDeparturesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('departures');
+        Schema::dropIfExists('departures');
     }
 }

@@ -23,7 +23,7 @@ class CreateOperatorsTable extends Migration
             $table->string('company_name')->nullable();
             $table->string('email')->unique()->nullable();
             $table->string('logo')->nullable(); //the path to the logo file of the company
-            $table->string('city')->index();
+            $table->unsignedInteger('city_id')->index();
             $table->string('address1')->nullable();
             $table->string('address2')->nullable();
             $table->string('contact_nr')->nullable();

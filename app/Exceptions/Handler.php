@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class Handler extends ExceptionHandler
 {
@@ -20,13 +22,13 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontFlash = ['password',
-                            'password_confirmation',
+        'password_confirmation',
     ];
 
     /**
      * Report or log an exception.
      *
-     * @param  \Exception $exception
+     * @param Exception $exception
      *
      * @return void
      */
@@ -38,10 +40,10 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Exception               $exception
+     * @param Request   $request
+     * @param Exception $exception
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function render($request, Exception $exception)
     {

@@ -1,11 +1,13 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+//@import ur0l('https://fonts.googleapis.com/css?family=Nunito');
+@import '/fonts/roboto/roboto.css';
+
 // Variables
 @import 'variables';
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
-
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-  }
+//Font Awesome
+@import "~@fortawesome/fontawesome-free/css/all.css";
+// Variables
+@import 'variables';
+@import "additions";
