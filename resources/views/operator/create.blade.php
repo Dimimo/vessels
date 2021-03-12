@@ -29,7 +29,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="name">Company Name of the Vessel Operator</label>
+                            <label for="company_name">Company Name of the Vessel Operator</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text"><span class="fas fa-building"></span></div>
@@ -69,7 +69,7 @@
                             </small>
                         </div>
                         <div class="form-group">
-                            <label for="city">City</label>
+                            <label for="city_id">City</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text"><span class="fas fa-map"></span></div>
@@ -103,7 +103,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="address1">Address line 2</label>
+                            <label for="address2">Address line 2</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text"><span class="fas fa-map-marker-alt dark-green"></span></div>

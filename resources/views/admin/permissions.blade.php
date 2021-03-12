@@ -20,7 +20,7 @@
 
 @push('js')
     <script>
-        const $permissions = {!! $permissions !!};
+        const $permissions = "{!! $permissions !!}";
         //add styles to the table
         $('table').addClass('table table-bordered table-sm table-hover');
         const $header_ths = $('thead > tr').find('th');
@@ -65,7 +65,7 @@
                 success: function (data) {
                     let $cell = $('#' + data.id);
                     data.val === "1" ? $cell.text('✔') : $cell.text('');
-                    let access = '';
+                    let access;
                     if (data.val === "1") {
                         $cell.text('✔');
                         $cell.addClass('font-weight-bold green');
